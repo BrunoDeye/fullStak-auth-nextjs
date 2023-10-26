@@ -1,11 +1,38 @@
 import NextAuth from "next-auth";
 
+export enum Departments {
+  logistics = "logistics",
+  dispatch = "dispatch",
+  maintenance = "maintenance",
+  support = "support",
+  marketing = "marketing",
+}
+
+export enum Groups {
+  colaborator = "colaborator",
+  integrator = "integrator",
+  distributor = "distributor",
+  client = "client",
+}
+
+export enum Roles {
+  USER = "USER",
+  ADMIN = "ADMIN",
+  MANAGER = "MANAGER",
+}
+
 declare module "next-auth" {
   interface Session {
     user: {
-      id: number;
-      email: string;
-      name: string;
+      username: string,
+      sub: {
+        id: number,
+        name: string,
+        lastname: string,
+        role: Roles,
+        group: Groups,
+        department: Departments,
+      },
     };
 
     backendTokens: {
@@ -21,9 +48,15 @@ import { JWT } from "next-auth/jwt";
 declare module "next-auth/jwt" {
   interface JWT {
     user: {
-      id: number;
-      email: string;
-      name: string;
+      username: string,
+      sub: {
+        id: number,
+        name: string,
+        lastname: string,
+        role: Roles,
+        group: Groups,
+        department: Departments,
+      },
     };
 
     backendTokens: {

@@ -1,9 +1,11 @@
 const getVariant = (variant?: VariantType) => {
   switch (variant) {
     case "primary":
+      return "bg-sky-500 hover:bg-sky-700  text-white shadow shadow-sky-600/25 hover:shadow-sky-600/75";
+    case "secondary":
       return "bg-violet-500 hover:bg-violet-700  text-white shadow shadow-violet-600/25 hover:shadow-violet-600/75";
     case "danger":
-      return "bg-red-500 hover:bg-red-700 text-white  shadow shadow-red-600/25 hover:shadow-red-600/75";
+      return "bg-red-600 hover:bg-red-700 text-white  shadow shadow-red-600/25 hover:shadow-red-600/75";
     case "success":
       return "bg-green-500 hover:bg-green-700 text-white shadow shadow-green-600/25 hover:shadow-green-600/75 ";
     case "warning":
@@ -26,6 +28,7 @@ const getVariant = (variant?: VariantType) => {
 
 type VariantType =
   | "primary"
+  | "secondary"
   | "danger"
   | "success"
   | "warning"

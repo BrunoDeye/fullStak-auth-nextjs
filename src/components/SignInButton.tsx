@@ -1,41 +1,30 @@
 "use client";
 import { useSession } from "next-auth/react";
-import Link from "next/link";
+import { usePathname } from "next/navigation";
 import React from "react";
+import { signOut } from "next-auth/react";
+import {Button} from '@nextui-org/button';
 
-const SignInButton = () => {
-  const { data: session } = useSession();
-  console.log({ session });
+function SignInButton() {
+  const { data: session, status, update } = useSession();
+  const pathname = usePathname();
+  // console.log(session);
+
+  if (status === "loading")
+    return <div className="flex gap-4 ml-auto">Carregando...</div>;
 
   if (session && session.user)
     return (
-      <div className="flex gap-4 ml-auto">
-        <p className="text-sky-600">{session.user.name}</p>
-        <Link
-          href={"/api/auth/signout"}
-          className="flex gap-4 ml-auto text-red-600"
-        >
-          Sign Out
-        </Link>
+      <div className="flex gap-4 pl-unit-3xl transition-all delay-100 duration-200 w-unit-80 hover:w-unit-9xl pr-unit-8 rounded rounded-l-full justify-around items-center bg-sky-700">
+        <p className="text-sky-100">{session.user.sub.name} {session.user.sub.lastname}</p>
+
+        <Button radius="sm" color="danger"  onClick={() => signOut()} className="ml-auto">
+          Sair
+        </Button>
       </div>
     );
 
-  return (
-    <div className="flex gap-4 ml-auto items-center">
-      <Link
-        href={"/api/auth/signin"}
-        className="flex gap-4 ml-auto text-green-600"
-      >
-        Sign In
-      </Link>
-      <Link
-        href={"/signup"}
-        className="flex gap-4 ml-auto bg-green-600 text-green-200 p-2 rounded"
-      >
-        Sign Up
-      </Link>
-    </div>
-  );
-};
+  return null;
+}
 
 export default SignInButton;

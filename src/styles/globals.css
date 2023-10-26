@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+  .hr {
+    display: inline-block;
+  }
+  .hr:after {
+    content: '';
+    display: block;
+    border-top: 3px solid blue;
+    margin-top: 0.5em;
+  }
+
+  .img-gradient {
+    position: relative;
+    display: inline-block;
+  }
+
+  .img-gradient img {
+    display: block;
+  }
+
+  .img-gradient:after {
+    position: absolute;
+    content: "";
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.85) 15%,
+      50%,
+      rgba(0, 0, 0, 0) 75%
+    );
+  }
+  @media screen and (max-height: 800px) and (min-width: 600px) {
+    .img-gradient:after {
+      background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, 0.75) 10%,
+        75%,
+        rgba(0, 0, 0, 0) 95%
+      );
+    }
+  }
+  
+
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: var(--lightestgrey);
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+  html, body, main {
+    background-color:#ffffff;
+    margin:0 0 0 0;
+    overflow: hidden;
+  }
+  body {
+    max-height: 100vh;
+  }
+
+  h1 {
+    @apply text-4xl font-bold md:text-5xl;
+  }
+
+  h2 {
+    @apply text-3xl font-bold md:text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl font-bold md:text-3xl;
+  }
+
+  h4 {
+    @apply text-xl font-bold;
+  }
+
+  h5 {
+    @apply text-lg font-bold;
+  }
+
+  .wrapper {
+    @apply mx-auto px-1 py-6 sm:p-6;
+    max-width: 100vw;
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important; /* Firefox 48 – 96 */
+    print-color-adjust: exact !important;
+  }
+}
