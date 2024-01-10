@@ -1,6 +1,6 @@
 "use client";
 import { Button } from "@nextui-org/button";
-import { Input } from "@nextui-org/react";
+import { Input, Link  } from "@nextui-org/react";
 import { signIn, useSession } from "next-auth/react";
 import Image from "next/image";
 import React, { useEffect, useRef } from "react";
@@ -9,7 +9,6 @@ import { useForm } from "react-hook-form";
 import * as z from "zod";
 import DeyeBuilding from "@/../public/deye8.png";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
 import { mapGroups } from "@/utils/mapGroupsFromBack";
 import { AiOutlineMail } from "react-icons/ai";
 import { RiLockPasswordLine } from "react-icons/ri";
@@ -54,7 +53,9 @@ const LoginPage = () => {
   useEffect(() => {
     if (session) {
       const { role, group } = session.user.sub;
-      router.push(`/${mapGroups(role)}/${mapGroups(group)}/dashboard`);
+      router.push(`/central/${mapGroups(role)}/${mapGroups(group)}/dashboard`);
+      // router.push("/");
+      
     }
   }, [session, router]);
   return (
@@ -77,7 +78,7 @@ const LoginPage = () => {
                 Gerencie sua conta na Central Deye{" "}
               </h4>
 
-              <p className="mt-6 font-light text-2xl">
+              <p className="mt-6 sm:max-w-[28vw] font-light text-2xl">
                 A central da maior fabricante de Inversores do Brasil!
               </p>
 
@@ -164,7 +165,7 @@ const LoginPage = () => {
           <Form {...form}>
             <form
               onSubmit={form.handleSubmit(onSubmit)}
-              className="space-y-8 max-w-[400px] w-full mx-auto p-8"
+              className="space-y-9 sm:space-y-12 max-w-[400px] w-full mx-auto p-8"
             >
               <FormField
                 control={form.control}
@@ -217,14 +218,17 @@ const LoginPage = () => {
               >
                 Entrar
               </Button>
-              <div className="w-full text-center">
+              {/* <div className="w-full text-center">
+              <p className="text-center">
+                Precisa criar uma conta?
                 <Link
-                  className="underline hover:text-sky-700"
+                  className="underline ml-2"
                   href={"/sign-up"}
                 >
-                  Registrar
+                  Cadastre-se
                 </Link>
-              </div>
+              </p>
+              </div> */}
             </form>
           </Form>
         </div>
@@ -234,92 +238,3 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
-
-// const formSchema = z.object({
-//   username: z.string().email({ message: "Email inválido" }),
-//   password: z.string().min(4, {
-//     message: "Senha deve conter pelo menos 4 caracteres.",
-//   }),
-// });
-
-// export function ProfileForm() {
-//   const form = useForm<z.infer<typeof formSchema>>({
-//     resolver: zodResolver(formSchema),
-//     defaultValues: {
-//       username: "",
-//       password: "",
-//     },
-//   });
-
-//   async function onSubmit(values: z.infer<typeof formSchema>) {
-//     await signIn("credentials", {
-//       username: form.getValues().username,
-//       password: form.getValues().password,
-//       redirect: false,
-//     });
-//     console.log(values);
-//   }
-
-//   return (
-//     <Form {...form}>
-//       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8 max-w-[400px] w-full mx-auto p-8">
-//         <FormField
-//           control={form.control}
-//           name="username"
-//           render={({ field }) => (
-//             <FormItem>
-//               <FormControl>
-//                 <Input
-//                   label="Email"
-//                   labelPlacement="outside"
-//                   variant="bordered"
-//                   size="lg"
-//                   radius="sm"
-//                   autoComplete="on"
-//                   type={"email"}
-//                   startContent={<AiOutlineMail />}
-//                   {...field}
-//                 />
-//               </FormControl>
-//               <FormMessage />
-//             </FormItem>
-//           )}
-//         />
-//         <FormField
-//           control={form.control}
-//           name="password"
-//           render={({ field }) => (
-//             <FormItem>
-//               <FormControl>
-//                 <Input
-//                   label="Senha"
-//                   labelPlacement="outside"
-//                   variant="bordered"
-//                   size="lg"
-//                   radius="sm"
-//                   type={"password"}
-//                   startContent={<RiLockPasswordLine />}
-//                   {...field}
-//                 />
-//               </FormControl>
-//               <FormMessage />
-//             </FormItem>
-//           )}
-//         />
-//         <Button
-//           radius="sm"
-//           color="primary"
-//           type="submit"
-//           className="mt-7 mb-6 w-full px-unit-2 py-unit-1 min-w-unit-3xl"
-//         >
-//           Entrar
-//         </Button>
-//         <div className="w-full text-center">
-//           <Link className="underline hover:text-sky-700" href={"/sign-up"}>
-//             Registrar
-//           </Link>
-//         </div>
-//       </form>
-//     </Form>
-//   );
-// }

@@ -1,10 +1,11 @@
-import AppBar from "@/components/AppBar";
 import "@/styles/globals.css";
 import Providers from "@/components/Providers";
 import { Josefin_Sans } from "next/font/google";
 import React from "react";
 import { NextUIProviders } from "./providers";
 import { cn } from "@/shad/utils";
+import NavBar from "@/components/NavBar/NavBar";
+import { Toaster } from "@/components/ui/toaster"
 
 const josefin = Josefin_Sans({
   subsets: ["latin"],
@@ -33,11 +34,10 @@ export default function RootLayout(props: Props) {
         <Providers>
           <NextUIProviders>
             <main>
-              <AppBar />
-          
+                <NavBar />
 
                 {props.children}
-                
+                <Toaster />
             </main>
           </NextUIProviders>
         </Providers>

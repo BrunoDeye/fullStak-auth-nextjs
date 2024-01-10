@@ -1,47 +1,57 @@
 "use client";
 import React, { ReactNode, useEffect, useRef } from "react";
 import lottie from "lottie-web";
+import { unmountComponentAtNode } from "react-dom";
+
+export type IconNames = "userIcon" | "warrantyIcon" | "keyIcon"
 
 type Props = {
 
     children?: ReactNode;
     className?: string;
-    icon: "userIcon" | "warrantyIcon";
+    animationName: string; 
+    icon: IconNames;
+    size?: number;
 }
 
 const UserIcon = ({
   children = "",
   className = "",
+  animationName,
   icon = "userIcon",
+  size = 40,
 }: Props) => {
   const container = useRef(null);
 
   useEffect(() => {
-    if (container.current)
+    // console.log("TRIGGER1")
+    if (container.current){
+      // console.log("BUILD")
       lottie.loadAnimation({
         container: container.current,
-        name: icon,
+        name: animationName,
         renderer: "svg",
         loop: true,
         autoplay: false,
         animationData: require(`./${icon}.json`),
-        rendererSettings: {
-          preserveAspectRatio: "xMidYMid meet",
-        },
-      });
 
-    return () => {
-      lottie.destroy();
-    };
+      });}
+
+   return () =>{ 
+    lottie.destroy(); 
+    // if (container.current){
+    //   UserIcon.apply
+    // }
+  }
   }, []);
 
   return (
     <div
       className={`${className || ""} flex items-center gap-2`}
-      onMouseEnter={() => lottie.play(icon)}
-      onMouseLeave={() => lottie.stop(icon)}
+      // onMouseEnter={() => lottie.play(animationName)}
+      // onMouseLeave={() => lottie.stop(animationName)}
     >
-      <div style={{ height: 40, minHeight: 40, minWidth: 40, maxWidth:40 }} id={icon} ref={container} />
+      <div style={{ height: size, minHeight: size, minWidth: size, maxWidth:size }} id={icon} ref={container} />
       {children}
     </div>
   );

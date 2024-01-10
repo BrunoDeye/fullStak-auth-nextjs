@@ -238,6 +238,7 @@ const columnsTest = [
   {name: "APROVAÇÃO", uid: "approvalDate", sortable: true},
   {name: "CRIAÇÃO", uid: "createdAt", sortable: true},
   {name: "PRIORIDADE", uid: "priority", sortable: true},
+  {name: "ERRO", uid: "fault", sortable: false},
   {name: "TIPO", uid: "warrantyType", sortable: true},
   {name: "STATUS", uid: "status", sortable: true},
   {name: "COMENTÁRIOS", uid: "comments"},

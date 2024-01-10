@@ -1,4 +1,5 @@
 "use client"
+import { Spinner } from "@nextui-org/react";
 import { useSession } from "next-auth/react";
 
 export default function Home() {
@@ -7,7 +8,7 @@ export default function Home() {
 
   if ( status === "loading") 
     return (<div>
-      Loading...
+      <Spinner />
     </div>)
   
 

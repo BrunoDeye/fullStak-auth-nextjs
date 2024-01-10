@@ -29,7 +29,6 @@ import { SearchIcon } from "lucide-react";
 import { columns, warranties, statusOptions } from "@/utils/dataTemp";
 import { capitalize } from "@/utils/capitalize";
 import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { Backend_URL } from "@/lib/Constants";
 import transformArray from "@/utils/transformWarranty";
 import { WarrantyData } from "@/types/warranty.type";
@@ -37,6 +36,8 @@ import { FormattedWarranty } from "@/types/FormattedWarranty.type";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import { mapGroups } from "@/utils/mapGroupsFromBack";
+import dateFormatter from "@/utils/dateFormatter";
+import { create } from 'zustand';
 
 const statusColorMap: Record<string, ChipProps["color"]> = {
   WAITING_FOR_APPROVAL: "warning",
@@ -92,6 +93,11 @@ export default function WarrantiesTable({ warrantiesList }: Props) {
   const [selectedKeys, setSelectedKeys] = React.useState<Selection>(
     new Set([])
   );
+  const [isClient, setIsClient] = React.useState(false)
+ 
+  React.useEffect(() => {
+    setIsClient(true)
+  }, [])
   const [visibleColumns, setVisibleColumns] = React.useState<Selection>(
     new Set(INITIAL_VISIBLE_COLUMNS)
   );
@@ -155,10 +161,31 @@ export default function WarrantiesTable({ warrantiesList }: Props) {
 
   const pages = Math.ceil(filteredItems.length / rowsPerPage);
 
+  const convertDateStringToDate = (dateString: string) => {
+    if (dateString === null) return new Date(1999, 1 - 1, 1);
+    return new Date(dateString); // Month is 0-based in JavaScript Dates
+  };
   const sortedItems = React.useMemo(() => {
     const sortedItems = [...filteredItems].sort((a: User, b: User) => {
-      const first = a[sortDescriptor.column as keyof User] as number;
-      const second = b[sortDescriptor.column as keyof User] as number;
+      let first
+      let second
+
+      if (
+        (sortDescriptor.column as keyof User) === "approvalDate" ||
+        (sortDescriptor.column as keyof User) === "createdAt"
+      ) {
+        // console.log(typeof a[sortDescriptor.column as keyof User])
+        first = convertDateStringToDate(
+          a[sortDescriptor.column as keyof User] as string
+        ) as any;
+        second = convertDateStringToDate(
+          b[sortDescriptor.column as keyof User] as string
+        ) as any;
+      } else {
+        first = a[sortDescriptor.column as keyof User] as number;
+        second = b[sortDescriptor.column as keyof User] as number;
+      }
+
       const cmp = first < second ? -1 : first > second ? 1 : 0;
 
       return sortDescriptor.direction === "descending" ? -cmp : cmp;
@@ -179,6 +206,11 @@ export default function WarrantiesTable({ warrantiesList }: Props) {
       const cellValue = warranty[columnKey as keyof User];
 
       switch (columnKey) {
+        case "createdAt":
+          return dateFormatter(warranty.createdAt as any)
+        case "approvalDate":
+          return dateFormatter(warranty.approvalDate as any)
+
         case "author":
           return (
             <User
@@ -269,7 +301,7 @@ export default function WarrantiesTable({ warrantiesList }: Props) {
 
   const topContent = React.useMemo(() => {
     return (
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 mr-1">
         <div className="flex justify-between gap-3 items-end">
           <Input
             isClearable
@@ -330,8 +362,8 @@ export default function WarrantiesTable({ warrantiesList }: Props) {
                 selectionMode="multiple"
                 onSelectionChange={setVisibleColumns}
               >
-                {columns.map((column) => (
-                  <DropdownItem key={column.uid} className="capitalize">
+                {columns.filter((item) => item.uid !== "actions" ).map((column) => (
+                  <DropdownItem  key={column.uid} className="capitalize">
                     {capitalize(column.name)}
                   </DropdownItem>
                 ))}
@@ -435,6 +467,7 @@ export default function WarrantiesTable({ warrantiesList }: Props) {
   );
 
   return (
+    isClient ? 
     <Table
       isCompact
       removeWrapper
@@ -475,6 +508,6 @@ export default function WarrantiesTable({ warrantiesList }: Props) {
           </TableRow>
         )}
       </TableBody>
-    </Table>
+    </Table> : null
   );
 }

@@ -1,14 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  experimental: {
-    typedRoutes: true,
-    serverActions: true,
-  },
+ 
   images: {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'pt.deyeinverter.com',
+        hostname: 's3.sa-east-1.amazonaws.com',
         port: '',
         pathname: '/**',
       },
